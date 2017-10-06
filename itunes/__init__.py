@@ -517,7 +517,7 @@ class Audiobook(Album):
 
 # Software
 class Software(Track):
-    """ Audiobook class """
+    """ Software class """
     def __init__(self, id):
         Track.__init__(self, id)
 
@@ -532,6 +532,8 @@ class Software(Track):
         self._set_languages(json)
         self._set_avg_rating(json)
         self._set_num_ratings(json)
+        self._set_bundle_id(json)
+        self._set_current_version_release_date(json)
 
     def _set_version(self, json):
         self.version = json.get('version', None)
@@ -566,6 +568,14 @@ class Software(Track):
         else:
             self.num_ratings = json.get('userRatingCount', None)
 
+    def _set_bundle_id(self, json):
+        self.bundle_id = json.get('bundleId', None)
+
+    def _set_current_version_release_date(self, json):
+        self.current_version_release_date = None
+        if json.has_key('currentVersionReleaseDate') and json['currentVersionReleaseDate']:
+            self.current_version_release_date = json['currentVersionReleaseDate'].split('T')[0]
+
     # GETTERs
     def get_version(self):
         return self.version
@@ -583,6 +593,10 @@ class Software(Track):
         return self.avg_rating
     def get_num_ratings(self):
         return self.num_ratings
+    def get_bundle_id(self):
+        return self.bundle_id
+    def get_current_version_release_date(self):
+        return self.current_version_release_date
 
 # CACHE
 def enable_caching(cache_dir = None):
